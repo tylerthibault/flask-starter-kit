@@ -1,0 +1,14 @@
+Flask==2.3.3                # Core framework
+Flask-SQLAlchemy==3.0.5     # ORM for database integration
+Flask-Migrate==4.0.4        # Database migrations
+Flask-WTF==1.1.1            # Form handling and CSRF protection
+Flask-Login==0.6.3          # User session management
+Flask-Mail==0.9.1           # Email sending
+bcrypt==4.0.1               # Password hashing
+python-dotenv==1.0.0        # Environment variable management
+gunicorn==21.2.0            # WSGI server for deployment
+Jinja2==3.1.2               # Template engine
+WTForms==3.0.1              # Form validation
+itsdangerous==2.1.2         # Cryptographic utilities for secure tokens
+requests==2.31.0            # HTTP requests library
+Werkzeug==2.2.3
