@@ -1,33 +1,31 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user
+from flask_login import current_user, login_required, login_user, logout_user
 from flask_app.controllers import user
 from flask_app.models.user import User
 from flask_app.forms.auth_forms import LoginForm, RegisterForm
 from flask_app.utils.auth_utils import authenticate_user
+from flask_app.extensions import db, bcrypt
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-@bp.route("/login", methods=["GET", "POST"])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+
     form = LoginForm()
     if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        remember = form.remember_me.data
-        
-        # Authenticate user
-        user = authenticate_user(email, password)
-        if user:
-            login_user(user, remember=remember)
-            flash("Logged in successfully!", "success")
-            return redirect(url_for("home.index"))
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect(url_for('home.index'))
         else:
             flash("Invalid email or password.", "danger")
-    return render_template("auth/login.html", form=form)
+    
+    return render_template('auth/login.html', form=form)
 
 
-from flask_app.extensions import db, bcrypt
-from flask_app.models.user import User
+
 
 @bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -45,3 +43,9 @@ def register():
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html", form=form)
 
+@bp.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("You have been logged out.", "info")
+    return redirect(url_for("auth.login"))  # Redirect to the login page

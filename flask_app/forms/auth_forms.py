@@ -27,7 +27,6 @@ class LoginForm(FlaskForm):
     # Submit button
     submit = SubmitField("Login")
 
-
 class RegisterForm(FlaskForm):
     # Username field with a regex validator for alphanumeric characters
     username = StringField(

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+
+
+<div class="container mt-5">
+    <h1 class="title has-text-centered">Site Configuration</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-5">
+        {{ form.hidden_tag() }}
+
+        <!-- General Settings -->
+        <div class="box">
+            <h2 class="subtitle has-text-weight-bold">General Settings</h2>
+            <div class="field">
+                <label class="label">{{ form.site_title.label }}</label>
+                <div class="control">
+                    {{ form.site_title(class="input is-rounded") }}
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{{ form.logo.label }}</label>
+                <div class="file is-boxed">
+                    <label class="file-label">
+                        {{ form.logo(class="file-input") }}
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">Choose a logo...</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{{ form.favicon.label }}</label>
+                <div class="file is-boxed">
+                    <label class="file-label">
+                        {{ form.favicon(class="file-input") }}
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">Choose a favicon...</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Customization -->
+        <div class="box">
+            <h2 class="subtitle has-text-weight-bold">Design Customization</h2>
+            <div class="columns is-multiline">
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.primary_color.label }}</label>
+                        <div class="control">
+                            {{ form.primary_color(class="input") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.secondary_color.label }}</label>
+                        <div class="control">
+                            {{ form.secondary_color(class="input") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.tertiary_color.label }}</label>
+                        <div class="control">
+                            {{ form.tertiary_color(class="input") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.heading_font.label }}</label>
+                        <div class="control">
+                            {{ form.heading_font(class="input is-rounded") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.subheading_font.label }}</label>
+                        <div class="control">
+                            {{ form.subheading_font(class="input is-rounded") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">{{ form.paragraph_font.label }}</label>
+                        <div class="control">
+                            {{ form.paragraph_font(class="input is-rounded") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Functional Features -->
+        <div class="box">
+            <h2 class="subtitle has-text-weight-bold">Functional Features</h2>
+            <div class="field">
+                <label class="checkbox">
+                    {{ form.maintenance_mode }}
+                    {{ form.maintenance_mode.label }}
+                </label>
+            </div>
+            <div class="field">
+                <label class="label">{{ form.maintenance_message.label }}</label>
+                <div class="control">
+                    {{ form.maintenance_message(class="textarea") }}
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{{ form.meta_description.label }}</label>
+                <div class="control">
+                    {{ form.meta_description(class="textarea") }}
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{{ form.analytics_code.label }}</label>
+                <div class="control">
+                    {{ form.analytics_code(class="textarea") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="field has-text-centered">
+            <button type="submit" class="button is-primary is-large is-rounded">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

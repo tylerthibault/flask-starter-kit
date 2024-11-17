@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <!-- Profile Sidebar -->
+      <div class="column is-one-third">
+        <div class="box has-text-centered">
+          <figure class="image is-128x128 is-inline-block">
+            <img class="is-rounded" src="{{ current_user.profile_picture_url or '/static/images/default-profile.png' }}" alt="Profile Picture">
+          </figure>
+          <h2 class="title is-4">{{ current_user.username }}</h2>
+          <p class="subtitle is-6">{{ current_user.email }}</p>
+          <a href="{{ url_for('user.settings') }}" class="button is-primary is-fullwidth mt-4">Edit Profile</a>
+        </div>
+      </div>
+
+      <!-- Profile Details -->
+      <div class="column">
+        <div class="box">
+          <h2 class="title is-4">User Information</h2>
+          <table class="table is-fullwidth">
+            <tbody>
+              <tr>
+                <th>Username:</th>
+                <td>{{ current_user.username }}</td>
+              </tr>
+              <tr>
+                <th>Email:</th>
+                <td>{{ current_user.email }}</td>
+              </tr>
+              <tr>
+                <th>Account Created:</th>
+                <td>{{ current_user.created_at.strftime('%B %d, %Y') }}</td>
+              </tr>
+              <tr>
+                <th>Last Updated:</th>
+                <td>{{ current_user.updated_at.strftime('%B %d, %Y') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box mt-5">
+          <h2 class="title is-4">Recent Activity</h2>
+          <p>Coming soon: This section will display your recent activity and updates.</p>
+        </div>
+
+        <div class="box mt-5">
+          <h2 class="title is-4">Statistics</h2>
+          <div class="columns">
+            <div class="column">
+              <div class="notification is-info has-text-centered">
+                <p class="title is-5">Tasks Completed</p>
+                <p class="subtitle is-3">42</p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="notification is-success has-text-centered">
+                <p class="title is-5">Projects</p>
+                <p class="subtitle is-3">8</p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="notification is-warning has-text-centered">
+                <p class="title is-5">Messages</p>
+                <p class="subtitle is-3">15</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

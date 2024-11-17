@@ -1,16 +1,56 @@
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <strong>My Flask App</strong>
-            </a>
-        </div>
-        <div class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">Home</a>
-                <a class="navbar-item" href="/auth/login">Login</a>
-                <a class="navbar-item" href="/auth/register">Register</a>
-            </div>
-        </div>
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{ url_for('home.index') }}">
+        <strong>MyApp</strong>
+      </a>
+      <!-- Hamburger menu for mobile -->
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMain">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-</nav>
+  
+    <div id="navbarMain" class="navbar-menu">
+      <div class="navbar-start">
+        <a href="{{ url_for('home.index') }}" class="navbar-item">Home</a>
+  
+        {% if current_user.is_authenticated and current_user.sys_admin %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Admin</a>
+          <div class="navbar-dropdown">
+            <a href="{{ url_for('admin.dashboard') }}" class="navbar-item">Dashboard</a>
+            <a href="{{ url_for('admin.manage_users') }}" class="navbar-item">Manage Users</a>
+            <a href="{{ url_for('admin.view_logs') }}" class="navbar-item">View Logs</a>
+            <hr class="navbar-divider">
+            <a href="{{ url_for('admin.site_config') }}" class="navbar-item">Site Config</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+  
+      <div class="navbar-end">
+        {% if current_user.is_authenticated %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">{{ current_user.username }}</a>
+          <div class="navbar-dropdown is-right">
+            <a href="{{ url_for('user.profile') }}" class="navbar-item">Profile</a>
+            <a href="{{ url_for('user.settings') }}" class="navbar-item">Settings</a>
+            <hr class="navbar-divider">
+            <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
+          </div>
+        </div>
+        {% else %}
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href="{{ url_for('auth.register') }}" class="button is-primary">
+              <strong>Sign Up</strong>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="button is-light">Log In</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  

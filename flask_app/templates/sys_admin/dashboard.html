@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">Sys Admin Dashboard</h1>
+    <h2 class="subtitle">Welcome, {{ current_user.username }}!</h2>
+
+    <div class="columns">
+      <!-- User Management -->
+      <div class="column is-one-third">
+        <div class="box">
+          <h3 class="title is-4">User Management</h3>
+          <p class="content">Manage users, roles, and permissions.</p>
+          <a href="{{ url_for('admin.manage_users') }}" class="button is-primary is-fullwidth">Manage Users</a>
+        </div>
+      </div>
+
+      <!-- System Logs -->
+      <div class="column is-one-third">
+        <div class="box">
+          <h3 class="title is-4">System Logs</h3>
+          <p class="content">View and analyze system activity logs.</p>
+          <a href="{{ url_for('admin.view_logs') }}" class="button is-link is-fullwidth">View Logs</a>
+        </div>
+      </div>
+
+      <!-- Site Configuration -->
+      <div class="column is-one-third">
+        <div class="box">
+          <h3 class="title is-4">Site Configuration</h3>
+          <p class="content">Modify application settings and configurations.</p>
+          <a href="{{ url_for('admin.site_config') }}" class="button is-warning is-fullwidth">Edit Settings</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Dashboard Stats -->
+    <div class="box mt-5">
+      <h3 class="title is-4">System Overview</h3>
+      <div class="columns">
+        <div class="column">
+          <div class="notification is-info has-text-centered">
+            <p class="title is-5">Active Users</p>
+            <p class="subtitle is-3">{{ active_users }}</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="notification is-success has-text-centered">
+            <p class="title is-5">Total Users</p>
+            <p class="subtitle is-3">{{ total_users }}</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="notification is-danger has-text-centered">
+            <p class="title is-5">Pending Issues</p>
+            <p class="subtitle is-3">{{ pending_issues }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
