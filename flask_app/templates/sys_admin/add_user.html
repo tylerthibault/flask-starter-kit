@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">Add New User</h1>
+    <form method="POST" action="{{ url_for('admin.add_user') }}" class="box">
+        {{ form.hidden_tag() }}
+        
+        <div class="field">
+            <label class="label">{{ form.username.label }}</label>
+            <div class="control">
+                {{ form.username(class="input", placeholder="Enter username") }}
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">{{ form.email.label }}</label>
+            <div class="control">
+                {{ form.email(class="input", placeholder="Enter email address") }}
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">{{ form.password.label }}</label>
+            <div class="control">
+                {{ form.password(class="input", type="password", placeholder="Enter password") }}
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">{{ form.roles.label }}</label>
+            <div class="control">
+                <div class="select">
+                    <select name="{{ form.roles.name }}">
+                        {% for role_id, role_name in form.roles.choices %}
+                            <option value="{{ role_id }}">{{ role_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="field">
+            <div class="control">
+                {{ form.submit(class="button is-primary") }}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -42,12 +42,14 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>
-              {% if user.sys_admin %}
-              <span class="tag is-danger">Admin</span>
-              {% else %}
-              <span class="tag is-light">User</span>
+              {% for role in user.get_roles() %}
+                  <span class="tag">{{ role }}</span>
+              {% endfor %}
+              {% if user.roles|length == 0 %}
+                  <span class="tag is-light">No Role</span>
               {% endif %}
-            </td>
+          </td>
+          
             <td>{{ user.created_at.strftime('%B %d, %Y') }}</td>
             <td>
               <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="button is-small is-info">Edit</a>
