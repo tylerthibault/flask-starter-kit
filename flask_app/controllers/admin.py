@@ -1,5 +1,5 @@
 import pickle
-from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, url_for
 from flask_login import login_required, current_user
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.sql import text
@@ -22,32 +22,11 @@ def dashboard():
     # Total users
     total_users = User.query.count()
 
-    # Query the flask_sessions table for active sessions
-    session_query = text("SELECT data FROM flask_sessions WHERE expiry > datetime('now')")
-    all_sessions = db.session.execute(session_query).all()
-
-    logged_in_user_ids = []
-
-    for session in all_sessions:
-        try:
-            # Deserialize session data using pickle
-            session_data = pickle.loads(session[0])
-            user_id = session_data.get("_user_id")  # Extract the user_id from session data
-            if user_id:
-                logged_in_user_ids.append(user_id)
-        except Exception as e:
-            current_app.logger.error(f"Error deserializing session: {e}")
-
-    # Remove duplicate user IDs
-    currently_logged_in = len(set(logged_in_user_ids))
-
     # Pass the data to the template
     stats = {
         'total_users': total_users,
-        'currently_logged_in': currently_logged_in,
     }
     return render_template('sys_admin/dashboard.html', **stats)
-
 
 @bp.route("/manage_users")
 @login_required
