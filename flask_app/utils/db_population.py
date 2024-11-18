@@ -41,8 +41,8 @@ def populate_sys_admin_user():
     """Populate a user with the sys-admin role."""
     # Define sys-admin user credentials
     sys_admin_username = "sysadmin"
-    sys_admin_email = "sysadmin@example.com"
-    sys_admin_password = "securepassword"  # Change this in production!
+    sys_admin_email = "sysadmin@email.com"
+    sys_admin_password = "Pass123!!"  # Change this in production!
 
     # Check if the user already exists
     user = User.query.filter_by(email=sys_admin_email).first()
