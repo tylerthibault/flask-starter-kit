@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block subnav %}
+{% include 'sys_admin/components/subnav.html' %}
+{% endblock subnav %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title has-text-centered">Roles Management</h1>
+    <div class="box">
+        <a href="{{ url_for('admin.add_role') }}" class="button is-primary is-small">Add New Role</a>
+        <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Permissions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                <tr>
+                    <td>{{ role.name }}</td>
+                    <td>
+                        {% for permission in role.permissions %}
+                        <span class="tag is-info is-light">{{ permission.name }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_role', role_id=role.id) }}" class="button is-small is-primary">Edit</a>
+                        <a href="{{ url_for('admin.delete_role', role_id=role.id) }}" class="button is-small is-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+

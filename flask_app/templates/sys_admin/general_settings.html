@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block subnav %}
+{% include 'sys_admin/components/subnav.html' %}
+
+{% endblock subnav %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title">General Settings</h1>
+    <div class="box">
+        <!-- Add your general settings form or content here -->
+        <form method="POST" action="{{ url_for('admin.update_general_settings') }}">
+            {{ form.hidden_tag() }}
+            <div class="field">
+                <label class="label">Site Name</label>
+                <div class="control">
+                    <input class="input" type="text" name="site_name" placeholder="Enter Site Name" value="{{ site_config.get('site_name', '') }}">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Admin Email</label>
+                <div class="control">
+                    <input class="input" type="email" name="admin_email" placeholder="Enter Admin Email" value="{{ site_config.get('admin_email', '') }}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

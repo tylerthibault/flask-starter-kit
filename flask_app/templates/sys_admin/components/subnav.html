@@ -1,0 +1,16 @@
+<!-- Sub-Navigation -->
+<nav class="tabs is-boxed is-fullwidth">
+    <div class="container">
+        <ul>
+            <li class="{% if 'general_settings' in request.endpoint %}is-active{% endif %}">
+                <a href="{{ url_for('admin.general_settings') }}">General Settings</a>
+            </li>
+            <li class="{% if 'roles_settings' in request.endpoint %}is-active{% endif %}">
+                <a href="{{ url_for('admin.roles_settings') }}">Roles</a>
+            </li>
+            <li class="{% if 'permissions_settings' in request.endpoint %}is-active{% endif %}">
+                <a href="{{ url_for('admin.roles_settings') }}">Permissions</a>
+            </li>
+        </ul>
+    </div>
+</nav>
