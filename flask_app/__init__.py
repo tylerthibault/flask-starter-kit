@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
+from flask_session import Session
 from flask_app.config.config import Config
 from flask_app.extensions import db, migrate, login_manager, mail, csrf
 from flask_app.controllers import auth
@@ -18,12 +19,22 @@ def create_app():
     # Load configuration
     app.config.from_object(Config)
 
+    # Configure the app
+    app.config['SECRET_KEY'] = 'your-secret-key'  # Required for session security
+    app.config['SESSION_TYPE'] = 'sqlalchemy'
+    app.config['SESSION_SQLALCHEMY'] = db  # Use the same SQLAlchemy instance
+    app.config['SESSION_SQLALCHEMY_TABLE'] = 'flask_sessions'
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_USE_SIGNER'] = True
+
+
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     mail.init_app(app)  # Optional
     csrf.init_app(app)  # Optional
+    Session(app)
 
     # Register blueprints
     app.register_blueprint(auth_bp)

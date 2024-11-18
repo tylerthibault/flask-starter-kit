@@ -35,28 +35,29 @@
       </div>
     </div>
 
-    <!-- Additional Dashboard Stats -->
     <div class="box mt-5">
       <h3 class="title is-4">System Overview</h3>
-      <div class="columns">
-        <div class="column">
-          <div class="notification is-info has-text-centered">
-            <p class="title is-5">Active Users</p>
-            <p class="subtitle is-3">{{ active_users }}</p>
+      <div class="columns is-multiline">
+        <!-- Active Users -->
+        <div class="column is-one-third">
+          <div class="card">
+            <div class="card-content has-text-centered">
+              <p class="title is-5">Currently Logged In</p>
+              <p class="subtitle is-3 has-text-info">{{ currently_logged_in }}</p>
+            </div>
           </div>
         </div>
-        <div class="column">
-          <div class="notification is-success has-text-centered">
-            <p class="title is-5">Total Users</p>
-            <p class="subtitle is-3">{{ total_users }}</p>
+    
+        <!-- Total Users -->
+        <div class="column is-one-third">
+          <div class="card">
+            <div class="card-content has-text-centered">
+              <p class="title is-5">Total Users</p>
+              <p class="subtitle is-3 has-text-success">{{ total_users }}</p>
+            </div>
           </div>
         </div>
-        <div class="column">
-          <div class="notification is-danger has-text-centered">
-            <p class="title is-5">Pending Issues</p>
-            <p class="subtitle is-3">{{ pending_issues }}</p>
-          </div>
-        </div>
+    
       </div>
     </div>
   </div>

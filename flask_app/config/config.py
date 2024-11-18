@@ -1,11 +1,15 @@
 import os
 from math import ceil
 
+from flask import app
+from requests import Session
+
+from flask_app.extensions import db
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", "sqlite:///app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
 
 
 def iter_pages(self, left_edge=2, left_current=2, right_current=5, right_edge=2):
