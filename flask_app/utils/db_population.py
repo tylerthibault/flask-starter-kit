@@ -46,6 +46,7 @@ def populate_sys_admin_user():
 
     # Check if the user already exists
     user = User.query.filter_by(email=sys_admin_email).first()
+    print(user)
     if not user:
         # Create the user
         user = User(

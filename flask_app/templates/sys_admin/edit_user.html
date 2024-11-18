@@ -20,6 +20,19 @@
                     <input class="input" type="email" name="email" value="{{ user.email }}" required>
                 </div>
             </div>
+
+            <div class="field">
+                <label class="label">{{ form.roles.label }}</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="{{ form.roles.name }}">
+                            {% for role_id, role_name in form.roles.choices %}
+                                <option value="{{ role_id }}">{{ role_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
         
             <div class="field">
                 <div class="control">

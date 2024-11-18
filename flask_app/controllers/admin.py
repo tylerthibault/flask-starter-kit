@@ -1,8 +1,9 @@
 import pickle
-from flask import Blueprint, abort, flash, redirect, render_template, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, url_for, request
 from flask_login import login_required, current_user
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.sql import text
+
 
 from flask_app.extensions import bcrypt, db
 from flask_app.forms.admin_forms import AddUserForm, EditUserForm
@@ -136,18 +137,30 @@ def edit_user(user_id):
         return "Access Denied", 403
 
     user = User.query.get_or_404(user_id)
+
+    # Initialize the form
     form = EditUserForm(obj=user)
+    form.roles.choices = [(role.id, role.name) for role in Role.query.all()]  # Populate roles dynamically
 
     if form.validate_on_submit():
+        # Update user fields
         user.username = form.username.data
         user.email = form.email.data
-        user.sys_admin = form.sys_admin.data
 
+        # Update roles
+        selected_roles = Role.query.filter(Role.id.in_(form.roles.data)).all()
+        user.roles = selected_roles  # Assign the selected roles
+
+        # Save changes to the database
         db.session.commit()
         flash(f"User '{user.username}' updated successfully!", 'success')
         return redirect(url_for('admin.manage_users'))
 
+    # Prepopulate selected roles
+    form.roles.data = [role.id for role in user.roles]
+
     return render_template('sys_admin/edit_user.html', form=form, user=user)
+
 
 @bp.route('/toggle_user_status/<int:user_id>', methods=['POST'])
 @login_required
