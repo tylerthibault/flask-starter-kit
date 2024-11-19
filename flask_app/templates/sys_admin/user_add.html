@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h1 class="title">Add New User</h1>
-    <form method="POST" action="{{ url_for('admin.add_user') }}" class="box">
+    <form method="POST" action="{{ url_for('admin.user_add') }}" class="box">
         {{ form.hidden_tag() }}
         
         <div class="field">

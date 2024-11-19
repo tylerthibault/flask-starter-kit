@@ -7,8 +7,9 @@ from sqlalchemy.sql import text
 
 from flask_app.extensions import bcrypt, db
 from flask_app.forms.admin_forms import AddUserForm, EditUserForm
+from flask_app.forms.role_forms import EditRoleForm
 from flask_app.forms.site_config import SiteConfigForm
-from flask_app.models.roles_permissions import Role
+from flask_app.models.roles_permissions import Permission, Role
 from flask_app.models.site_config import SiteConfig
 from flask_app.models.user import User
 
@@ -29,9 +30,9 @@ def dashboard():
     }
     return render_template('sys_admin/dashboard.html', **stats)
 
-@bp.route("/manage_users")
+@bp.route("/user_manage")
 @login_required
-def manage_users():
+def user_manage():
     if not current_user.has_permission('sys-admin'):
         return "Access Denied", 403
 
@@ -47,7 +48,7 @@ def manage_users():
     pagination = query.paginate(page=page, per_page=10, error_out=False)
     users = pagination.items
 
-    return render_template("sys_admin/manage_users.html", users=users, pagination=pagination)
+    return render_template("sys_admin/user_manage.html", users=users, pagination=pagination)
 
 @bp.route('/view_logs')
 @login_required
@@ -84,12 +85,30 @@ def site_config():
     # Pass the form object to the template
     return render_template('sys_admin/site_config.html', form=form, config=config)
 
+@bp.route('/site_config/general_settings')
+@login_required
+def general_settings():
+    if not current_user.has_permission('sys-admin'):
+        return "Access Denied", 403
 
+    return render_template('sys_admin/general_settings.html')
+
+
+@bp.route('/site_config/roles')
+@login_required
+def roles_settings():
+    if not current_user.has_permission('sys-admin'):
+        return "Access Denied", 403
+
+    roles = Role.query.all()
+    return render_template('sys_admin/roles_settings.html', roles=roles)
+
+# ************************************ USERS
 # CRUD - USERS
 # Create
-@bp.route('/add_user', methods=['GET', 'POST'])
+@bp.route('/user_add', methods=['GET', 'POST'])
 @login_required
-def add_user():
+def user_add():
     # Check if the current user has the required permission
     if not current_user.has_permission('sys-admin'):
         return "Access Denied", 403
@@ -121,18 +140,18 @@ def add_user():
         db.session.commit()
 
         flash(f"User '{username}' added successfully!", 'success')
-        return redirect(url_for('admin.manage_users'))
+        return redirect(url_for('admin.user_manage'))
 
-    return render_template('sys_admin/add_user.html', form=form)
+    return render_template('sys_admin/user_add.html', form=form)
 
 
-    return render_template('sys_admin/add_user.html', form=form)
+    return render_template('sys_admin/user_add.html', form=form)
 # READ
 
 # UPDATE
-@bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
+@bp.route('/user_edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-def edit_user(user_id):
+def user_edit(user_id):
     if not current_user.has_permission('sys-admin'):
         return "Access Denied", 403
 
@@ -154,12 +173,12 @@ def edit_user(user_id):
         # Save changes to the database
         db.session.commit()
         flash(f"User '{user.username}' updated successfully!", 'success')
-        return redirect(url_for('admin.manage_users'))
+        return redirect(url_for('admin.user_manage'))
 
     # Prepopulate selected roles
     form.roles.data = [role.id for role in user.roles]
 
-    return render_template('sys_admin/edit_user.html', form=form, user=user)
+    return render_template('sys_admin/user_edit.html', form=form, user=user)
 
 
 @bp.route('/toggle_user_status/<int:user_id>', methods=['POST'])
@@ -174,7 +193,7 @@ def toggle_user_status(user_id):
 
     action = "enabled" if not user.disabled else "disabled"
     flash(f"User '{user.username}' has been {action}.", 'success')
-    return redirect(url_for('admin.manage_users'))
+    return redirect(url_for('admin.user_manage'))
 
 
 # DELETE
@@ -188,5 +207,70 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     flash(f"User {user.username} deleted successfully.", "success")
-    return redirect(url_for("admin.manage_users"))
+    return redirect(url_for("admin.user_manage"))
+
+
+# ************************************ Roles
+# CREATE
+@bp.route('/add_role', methods=['GET', 'POST'])
+@login_required
+def add_role():
+    if not current_user.has_permission('sys-admin'):
+        return "Access Denied", 403
+
+    form = EditRoleForm()
+    form.permissions.choices = [(perm.id, perm.name) for perm in Permission.query.all()]  # Populate permissions
+
+    if form.validate_on_submit():
+        new_role = Role(
+            name=form.name.data,
+            permissions=[Permission.query.get(perm_id) for perm_id in form.permissions.data]
+        )
+        db.session.add(new_role)
+        db.session.commit()
+        flash(f"Role '{new_role.name}' added successfully!", 'success')
+        return redirect(url_for('admin.roles_settings'))
+
+    return render_template('sys_admin/role_add.html', form=form)
+
+# UPDATE
+@bp.route('/edit_role/<int:role_id>', methods=['GET', 'POST'])
+@login_required
+def edit_role(role_id):
+    if not current_user.has_permission('sys-admin'):
+        return "Access Denied", 403
+
+    role = Role.query.get_or_404(role_id)
+    form = EditRoleForm(obj=role)  # Pre-fill form with role data
+    form.permissions.choices = [(perm.id, perm.name) for perm in Permission.query.all()]  # Populate permissions
+
+    if form.validate_on_submit():
+        role.name = form.name.data
+        role.permissions = [Permission.query.get(perm_id) for perm_id in form.permissions.data]
+        db.session.commit()
+        flash(f"Role '{role.name}' updated successfully!", 'success')
+        return redirect(url_for('admin.roles_settings'))
+
+    return render_template('sys_admin/edit_role.html', form=form, role=role)
+
+# DELETE
+@bp.route('/delete_role/<int:role_id>', methods=['POST'])
+@login_required
+def delete_role(role_id):
+    if not current_user.has_permission('sys-admin'):
+        return "Access Denied", 403
+
+    role = Role.query.get_or_404(role_id)
+
+    # Check if the role is assigned to any users before deletion
+    if role.users:
+        flash(f"Role '{role.name}' cannot be deleted because it is assigned to users.", 'danger')
+        return redirect(url_for('admin.roles_settings'))
+
+    # Delete the role
+    db.session.delete(role)
+    db.session.commit()
+    flash(f"Role '{role.name}' deleted successfully!", 'success')
+    return redirect(url_for('admin.roles_settings'))
+
 

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block subnav %}
+{% include 'sys_admin/components/subnav.html' %}
+{% endblock subnav %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="title has-text-centered">Add New Role</h1>
+    <form method="POST" enctype="multipart/form-data" class="mt-5">
+        {{ form.hidden_tag() }}
+
+        <div class="field">
+            <label class="label">{{ form.name.label }}</label>
+            <div class="control">
+                {{ form.name(class="input is-rounded") }}
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">{{ form.description.label }}</label>
+            <div class="control">
+                {{ form.description(class="textarea") }}
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">{{ form.permissions.label }}</label>
+            <div class="control">
+                {{ form.permissions(class="textarea") }}
+            </div>
+        </div>
+
+        <div class="field has-text-centered">
+            <button type="submit" class="button is-primary is-large is-rounded">Add Role</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
